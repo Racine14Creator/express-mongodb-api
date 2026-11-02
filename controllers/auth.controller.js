@@ -5,7 +5,7 @@ import generateToken from "../utils/generateToken.js";
 // Signup a new user controller
 export const registerUser = async (req, res) => {
   try {
-    const { firstname, lastname, email, password } = req.body;
+    const { firstname, lastname, email, password, role } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -22,6 +22,7 @@ export const registerUser = async (req, res) => {
       lastname,
       email,
       password: hashedPassword,
+      role,
     });
 
     // Save the user to the database
