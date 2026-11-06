@@ -33,6 +33,26 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+// Get public users
+export const getPublicUsers = async (req, res) => { 
+  try {
+    const users = await User.find().select("-password");
+    res.status(200).json({
+      success: true,
+      message: "Public users retrieved successfully",
+      users: users.map(user => ({
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        role: user.role,
+      })),
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message, error: err });
+  }
+}
+
 export const updateUserProfile = async (req, res) => {
   try {
     const { role } = req.body;
