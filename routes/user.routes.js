@@ -6,6 +6,10 @@ import { authorize } from "../middleware/role.middleware.js";
 import {
   getProfile,
   updateUserProfile,
+  getAllUsers,
+  getPublicUsers,
+  deleteUser,
+  getUserById,
 } from "../controllers/user.controller.js";
 
 const router = exp.Router();
@@ -13,8 +17,19 @@ const router = exp.Router();
 // Protect the route with authentication middleware
 router.get("/profile", protect, getProfile);
 
-// Update Role of the user (Admin only)
+// Get All users (Admin only)
+router.get("/all", protect, authorize("admin", "superadmin"), getAllUsers);
 
+// Getting one user by ID
+router.get("/:id", protect, getUserById);
+
+// Get public users (no authentication required)
+router.get("/public", getPublicUsers);
+
+// Update Role of the user (Admin only)
 router.patch("/:id/role", protect, authorize("superadmin"), updateUserProfile);
+
+// Delete user (Admin only)
+router.delete("/:id", protect, authorize("superadmin"), deleteUser);
 
 export default router;
