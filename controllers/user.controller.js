@@ -14,6 +14,29 @@ export const getProfile = async (req, res) => {
   });
 };
 
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "User retrieved successfully", user });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
@@ -29,7 +52,10 @@ export const getAllUsers = async (req, res) => {
       })),
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
   }
 };
 
